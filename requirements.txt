@@ -4,3 +4,4 @@ pandas
 pydantic
 uvicorn
 python-multipart
+jinja2
