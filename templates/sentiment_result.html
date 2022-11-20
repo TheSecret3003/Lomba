@@ -117,14 +117,16 @@
                   <table class="table table-striped">
                     <thead>
                       <tr>
-                        <th>Informasi</th>
+                        <th>Kalimat</th>
+                        <th>Prediksi</th>
                         <th></th>
                       </tr>
                     </thead>
                     <tbody>
                       {% for d in data %}
                       <tr>
-                          <td class="border">{{ d }}</td>
+                          <td class="border">{{ d.teks }}</td>
+                          <td class="border">{{ d.prediction }}</td>
                       </tr>
                       {% endfor %}
                     </tbody>

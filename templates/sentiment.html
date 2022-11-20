@@ -114,12 +114,12 @@
                 <!-- /.card-header -->
                 <div class="card-body">
                   <!-- form start -->
-                  <form action="/sentiment" method="post">
+                  <form action="/sentiment" method="post" enctype="multipart/form-data">
                     <div class="form-group row">
                         <label for="sentence" class="col-md-4 col-form-label text-md-right">Kalimat</label>
     
                         <div class="col-md-6">
-                            <input id="sentence" type="text" class="form-control" name="sentence" autocomplete="sentence" autofocus>
+                            <input id="sentence" type="file" class="form-control" name="file" autocomplete="sentence" autofocus>
                         </div>
                     </div>
     

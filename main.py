@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request, Body, File, UploadFile, Form
+from fastapi import FastAPI, Request, Body, File, UploadFile, Form, BackgroundTasks
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 import pandas as pd
@@ -10,6 +10,8 @@ import re
 import string
 from scipy.special import softmax
 from simpletransformers.classification import ClassificationModel
+import csv
+import codecs
 import os
 from starlette.responses import HTMLResponse 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
@@ -159,6 +161,34 @@ async def make_prediction(ulasan):
 
 
 @app.post("/sentiment")
+async def handle_form(request: Request,background_tasks: BackgroundTasks,file: UploadFile = File(...)):
+    csvReader = csv.DictReader(codecs.iterdecode(file.file, 'utf-8'))
+    background_tasks.add_task(file.file.close)
+    data = list(csvReader)
+    list_teks = []
+    for teks in data :
+        kalimat = teks.get('teks')
+        list_teks.append(kalimat)
+
+    list_kalimat = []
+    sentiments = []
+    for teks in list_teks:
+        sentence_pairs, aspect_sentiment = generate_sentence_pair(teks)
+        predictions, raw_outputs = model.predict(sentence_pairs)
+        for i in range(len(predictions)):
+            if predictions[i] == 1:
+                sentiments.append(aspect_sentiment[i])
+                list_kalimat.append(teks)
+    data = []
+    for i in range(len(list_kalimat)):
+        temp ={'teks':list_kalimat[i],'prediction':sentiments[i]}
+        data.append(temp)
+    
+    # data = {'teks':list_kalimat,'predictions':sentiments}
+
+    return templates.TemplateResponse("sentiment_result.html", context={"request": request,"data":data})
+
+@app.post("/sentiment_sentence")
 async def handle_form(request: Request,sentence: str = Form(...)):
     sentence_pairs, aspect_sentiment = generate_sentence_pair(sentence)
     predictions, raw_outputs = model.predict(sentence_pairs)
@@ -168,7 +198,6 @@ async def handle_form(request: Request,sentence: str = Form(...)):
             sentiments.append(aspect_sentiment[i])
     data = {'aspect':aspect_sentiment,'sentiment':predictions}
     
-    # sentiments = await make_prediction(sentence)
     return templates.TemplateResponse("sentiment_result.html", context={"request": request,"data":sentiments})
 
 
