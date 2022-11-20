@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
   <script src="https://use.fontawesome.com/5bb81504e3.js"></script>
+  <script src="//cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js"></script>
   <script src="https://kit.fontawesome.com/f00f878d48.js" crossorigin="anonymous"></script>
   <!-- Font Awesome -->
   <link
@@ -114,7 +115,7 @@
                 <!-- /.card-header -->
                 <div class="card-body">
                   <!-- form start -->
-                  <table class="table table-striped">
+                  <table class="table table-striped yajra-datatable">
                     <thead>
                       <tr>
                         <th>Kalimat</th>
@@ -132,6 +133,10 @@
                     </tbody>
                   </table>
                 </div>
+                <div class="card-footer clearfix">
+                  <a href="#" class="btn btn-sm btn-info float-left" id="myButton">Export to Excel</a>
+                </div>
+              </div>
               </div>
             </div>
           </div>
@@ -154,5 +159,27 @@
 <script src="{{ url_for('static', path='/js/tempusdominus-bootstrap-4.min.js') }}"></script> 
 <script src="{{ url_for('static', path='/js/main.js') }}"></script> 
 <script src="{{ url_for('static', path='/js/Chart.min.js') }}"></script>
+<script src="{{ url_for('static', path='/js/jquery.table2excel.js') }}"></script>
+<script src="{{ url_for('static', path='/js/jquery.table2excel.min.js') }}"></script>
+<script src="//cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js"></script>
+<script>
+  $(document).ready(function(e){
+    $("#myButton").click(function(e){
+
+      $(".yajra-datatable").table2excel({
+
+        name:"Worksheet Name",
+
+        filename:"Kredit_Harian",//do not include extension
+
+        fileext:".xls" // file extension
+
+      });
+
+    });
+
+  });
+
+</script>
 </body>
 </html>
