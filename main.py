@@ -32,7 +32,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-path = "/home/eka/Documents/LombaApps/Apps/backend/train_new.csv"
+path = "train_new.csv"
 
 df = pd.read_csv(path)
 
