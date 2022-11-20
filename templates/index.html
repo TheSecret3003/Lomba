@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 | Dashboard</title>
+  <title>Admin Hotel | Dashboard</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link href="{{ url_for('static', path='/css/app.css') }}" rel="stylesheet">
@@ -416,7 +416,6 @@ $(function() {
         type: 'GET',
         dataType: 'json',
         success: function (data){
-            console.log(data.labels);
             var ticksStyle = {
                 fontColor: '#495057',
                 fontStyle: 'bold'
@@ -496,7 +495,6 @@ $(function() {
         type: 'GET',
         dataType: 'json',
         success: function (data){
-            console.log(data.labels);
             var ticksStyle = {
                 fontColor: '#495057',
                 fontStyle: 'bold'
