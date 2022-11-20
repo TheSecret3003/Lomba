@@ -6,6 +6,17 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.encoders import jsonable_encoder
 import logging
 import numpy as np
+import re
+import string
+from scipy.special import softmax
+from simpletransformers.classification import ClassificationModel
+from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
+import warnings
+from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
+warnings.simplefilter("ignore")
+import os
+from starlette.responses import HTMLResponse 
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 app = FastAPI()
 
@@ -84,6 +95,85 @@ async def room_aspect(request: Request):
 async def sentiment(request: Request):
     return templates.TemplateResponse("sentiment.html", context={"request": request})
 
+aspect_categories = ['wifi_P1',
+ 'kebersihan',
+ 'bau_P1',
+ 'service',
+ 'linen_P1',
+ 'ac_P1',
+ 'sunrise_meal_P1',
+ 'general',
+ 'air_panas_P1',
+ 'tv_P1']
+
+def generate_sentence_pair(ulasan):
+    sentence_pairs = []
+    sentence_pair1 = []
+    sentence_pair2 = []
+    sentence_pair3 = []
+    aspect_sentiment = []
+    for i in aspect_categories:
+        pair1 = i+"-pos"
+        pair2 = i+"-neg"
+        sentence_pair1.append(ulasan)
+        sentence_pair1.append(pair1)
+        sentence_pair2.append(ulasan)
+        sentence_pair2.append(pair2)
+        sentence_pairs.append(sentence_pair1)
+        sentence_pairs.append(sentence_pair2)
+        aspect_sentiment.append(pair1)
+        aspect_sentiment.append(pair2)
+        sentence_pair1 = []
+        sentence_pair2 = []
+    return sentence_pairs, aspect_sentiment
+
+def clean_text(text):
+    text = text.lower()
+    text = re.sub('[%s]' % re.escape(string.punctuation.replace('?', '')), '', text)
+    text = re.sub('\w*\d\w*', '', text)
+    text = re.sub('\n', '', text)
+    text = re.sub('\r', '', text)
+    text = text.replace('?', ' ?')
+    text = text.replace('\d+', '')
+    text = re.sub('[.;:!\'?,\"()\[\]*~]', '', text)
+    text = re.sub('(<br\s*/><br\s*/>)|(\-)|(\/)', '', text)
+    text = re.sub(r"^(â€œ)", "" ,text)
+    return text
+
+model = ClassificationModel('bert', "model", use_cuda=False, 
+        args={"use_multiprocessing": False, 
+              "use_multiprocessing_for_evaluation": False, 
+              "process_count": 1,
+              "silent" : False}) 
+
+@app.get("/prediction")
+async def make_prediction(ulasan):
+    sentence_pairs, aspect_sentiment = generate_sentence_pair(ulasan)
+    predictions, raw_outputs = model.predict(sentence_pairs)
+    test = pd.DataFrame(columns=["aspect-sentiment","label"])
+    test['aspect-sentiment'] = aspect_sentiment
+    test['label'] = predictions
+    result = test[test['label'] == 1]
+    pattern = 'pos|neg'
+    results = result['aspect-sentiment'].str.contains(pattern)
+    sentiments = []
+    for sentiment in result[results]['aspect-sentiment'].tolist():
+        sentiments.append(sentiment)
+    return sentiments
+
+
+@app.post("/sentiment")
+async def handle_form(sentence: str = Form(...)):
+    sentence_pairs, aspect_sentiment = generate_sentence_pair(sentence)
+    predictions, raw_outputs = model.predict(sentence_pairs)
+    sentiments = []
+    for i in range(len(predictions)):
+        if predictions[i] == 1:
+            sentiments.append(aspect_sentiment[i])
+    data = {'aspect':aspect_sentiment,'sentiment':predictions}
+    
+    # sentiments = await make_prediction(sentence)
+    return sentiments
 
 
 
