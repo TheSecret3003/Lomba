@@ -10,10 +10,6 @@ import re
 import string
 from scipy.special import softmax
 from simpletransformers.classification import ClassificationModel
-from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
-import warnings
-from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
-warnings.simplefilter("ignore")
 import os
 from starlette.responses import HTMLResponse 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
@@ -163,7 +159,7 @@ async def make_prediction(ulasan):
 
 
 @app.post("/sentiment")
-async def handle_form(sentence: str = Form(...)):
+async def handle_form(request: Request,sentence: str = Form(...)):
     sentence_pairs, aspect_sentiment = generate_sentence_pair(sentence)
     predictions, raw_outputs = model.predict(sentence_pairs)
     sentiments = []
@@ -173,7 +169,7 @@ async def handle_form(sentence: str = Form(...)):
     data = {'aspect':aspect_sentiment,'sentiment':predictions}
     
     # sentiments = await make_prediction(sentence)
-    return sentiments
+    return templates.TemplateResponse("sentiment_result.html", context={"request": request,"data":sentiments})
 
 
 

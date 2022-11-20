@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin Hotel | Dashboard</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link href="{{ url_for('static', path='/css/app.css') }}" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script> 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.js"></script>  
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <script src="https://use.fontawesome.com/5bb81504e3.js"></script>
+  <script src="https://kit.fontawesome.com/f00f878d48.js" crossorigin="anonymous"></script>
+  <!-- Font Awesome -->
+  <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+
+  
+  <!-- Navbar -->
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+      </li>
+    </ul>
+
+    <!-- Right navbar links -->
+    <ul class="navbar-nav ml-auto">
+      <button class="btn btn-danger">Logout</button>
+      <form id="logout-form" class="d-none">
+      </form>
+    </ul>
+  </nav>
+  <!-- /.navbar -->
+
+  <!-- Main Sidebar Container -->
+  <aside class="main-sidebar sidebar-dark-primary elevation-4" style = "background-color:#010336">
+    <!-- Brand Logo -->
+    <a href="#" class="brand-link">
+        <img src="{{ url_for('static', path='/image/hotel.png') }}" alt="Bali Tours" class="brand-image img-circle elevation-3"
+                style="opacity: .8">
+        <span class="brand-text font-weight-light" style="font-family: Bremen">Royal Hotel</span>
+    </a>
+    
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <!-- Sidebar user panel (optional) -->
+      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="image">
+          <img src="{{ url_for('static', path='/image/user.jpg') }}" class="img-circle elevation-2" alt="User Image">
+        </div>
+        <div class="info">
+          <a href="#" class="d-block">Admin</a>
+        </div>
+      </div>
+
+      <!-- Sidebar Menu -->
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            <li class="nav-item has-treeview">
+                <a href="{{ url_for('home') }}" class="nav-link">
+                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                    <p>
+                    DASHBOARD
+                    </p>
+                </a>
+            </li>
+            <li class="nav-item has-treeview">
+                <a href="{{ url_for('sentiment') }}" class="nav-link active">
+                    <i class="nav-icon fas fa-book"></i>
+                    <p>
+                    ANALISIS SENTIMEN
+                    </p>
+                </a>
+            </li>
+        </ul>
+      </nav>
+      <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+  </aside>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0">Analisis Sentimen</h1>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+          <!-- Small boxes (Stat box) -->
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card card-primary">
+                <div class="card-header">
+                  <h3 class="card-title">Hasil Prediksi</h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                  <!-- form start -->
+                  <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>Informasi</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for d in data %}
+                      <tr>
+                          <td class="border">{{ d }}</td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </section>
+
+  </div>
+  <!-- /.content-wrapper -->
+
+  <aside class="control-sidebar control-sidebar-dark">
+  </aside>
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="{{ url_for('static', path='/js/app.js') }}"></script> 
+<script src="{{ url_for('static', path='/js/jquery-ui.min.js') }}"></script> 
+<script src="{{ url_for('static', path='/js/moment.min.js') }}"></script> 
+<script src="{{ url_for('static', path='/js/tempusdominus-bootstrap-4.min.js') }}"></script> 
+<script src="{{ url_for('static', path='/js/main.js') }}"></script> 
+<script src="{{ url_for('static', path='/js/Chart.min.js') }}"></script>
+</body>
+</html>
