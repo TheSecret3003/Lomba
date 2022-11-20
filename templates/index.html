@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AdminLTE 3 | Dashboard</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link href="{{ url_for('static', path='/css/app.css') }}" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script> 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.js"></script>  
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <script src="https://use.fontawesome.com/5bb81504e3.js"></script>
+  <script src="https://kit.fontawesome.com/f00f878d48.js" crossorigin="anonymous"></script>
+  <!-- Font Awesome -->
+  <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+
+  
+  <!-- Navbar -->
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+      </li>
+    </ul>
+
+    <!-- Right navbar links -->
+    <ul class="navbar-nav ml-auto">
+      <button class="btn btn-danger">Logout</button>
+      <form id="logout-form" class="d-none">
+      </form>
+    </ul>
+  </nav>
+  <!-- /.navbar -->
+
+  <!-- Main Sidebar Container -->
+  <aside class="main-sidebar sidebar-dark-primary elevation-4" style = "background-color:#010336">
+    <!-- Brand Logo -->
+    <a href="#" class="brand-link">
+        <img src="{{ url_for('static', path='/image/hotel.png') }}" alt="Bali Tours" class="brand-image img-circle elevation-3"
+                style="opacity: .8">
+        <span class="brand-text font-weight-light" style="font-family: Bremen">Royal Hotel</span>
+    </a>
+    
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <!-- Sidebar user panel (optional) -->
+      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="image">
+          <img src="{{ url_for('static', path='/image/user.jpg') }}" class="img-circle elevation-2" alt="User Image">
+        </div>
+        <div class="info">
+          <a href="#" class="d-block">Admin</a>
+        </div>
+      </div>
+
+      <!-- Sidebar Menu -->
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            <li class="nav-item has-treeview">
+                <a href="{{ url_for('home') }}" class="nav-link active">
+                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                    <p>
+                    DASHBOARD
+                    </p>
+                </a>
+            </li>
+            <li class="nav-item has-treeview">
+                <a href="{{ url_for('sentiment') }}" class="nav-link">
+                    <i class="nav-icon fas fa-book"></i>
+                    <p>
+                    ANALISIS SENTIMEN
+                    </p>
+                </a>
+            </li>
+        </ul>
+      </nav>
+      <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+  </aside>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0">Dashboard</h1>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <!-- Small boxes (Stat box) -->
+        <div class="row">
+            <div class="col-lg-4 col-6">
+              <div class="small-box bg-info">
+                <div class="inner">
+                  <h3 style="font-size:24px;">34,720 Pesanan Kamar</h3>
+                  <p>Offline</p>
+                </div>
+                <div class="icon">
+                  <i class="ion ion-bag"></i>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 col-6">
+              <!-- small box -->
+              <div class="small-box bg-success">
+                <div class="inner">
+                  <h3 style="font-size:24px;">11,720 Pesanan Kamar</h3>
+                  <p>Online</p>
+                </div>
+                <div class="icon">
+                  <i class="ion ion-stats-bars"></i>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 col-6">
+              <!-- small box -->
+              <div class="small-box bg-danger">
+                <div class="inner">
+                  <h3 style="font-size:24px;">4,720 Pesanan Kamar</h3>
+  
+                  <p>Cancel</p>
+                </div>
+                <div class="icon">
+                  <i class="ion ion-pie-graph"></i>
+                </div>
+              </div>
+            </div>
+            <!-- ./col -->
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+              <div class="card">
+                <div class="card-header">
+                  <h5 class="card-title">Pemesanan Kamar</h5>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-lg-12">
+                      <p class="text-center">
+                        Progress Pesanan Paket
+                      </p>
+                      <div class="chart">
+                        <canvas id="chart-order" height="250"></canvas>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6">
+              
+              <!-- /.card -->
+  
+              <div class="card">
+                <div class="card-header border-0">
+                  <div class="d-flex justify-content-between">
+                    <h3 class="card-title">Pesanan Kamar Berdasarkan Jenis Kamar</h3>
+                    <div class="card-tools">
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body">
+  
+                  <div class="position-relative mb-4">
+                    <canvas id="pieChart" height="200"></canvas>
+                  </div>
+                </div>
+              </div>
+              <!-- /.card -->
+            </div>
+
+            <div class="col-lg-6">
+                <div class="card">
+                  <div class="card-header border-0">
+                    <div class="d-flex justify-content-between">
+                      <h3 class="card-title">Sentimen Review</h3>
+                      <div class="card-tools">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-body">
+    
+                    <div class="position-relative mb-4">
+                      <canvas id="pieChart1" height="200"></canvas>
+                    </div>
+                  </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">       
+            <div class="col-lg-12">
+              <div class="card">
+                <div class="card-header border-0">
+                  <div class="d-flex justify-content-between">
+                    <h3 class="card-title">Sentimen Per-Aspek</h3>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="position-relative mb-4">
+                    <canvas id="bar-chart" height="285"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+
+        <div class="row">       
+            <div class="col-lg-12">
+              <div class="card">
+                <div class="card-header border-0">
+                  <div class="d-flex justify-content-between">
+                    <h3 class="card-title">Sentimen Per-Kamar</h3>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="position-relative mb-4">
+                    <canvas id="bar-chart1" height="285"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <!-- /.content-wrapper -->
+
+  <aside class="control-sidebar control-sidebar-dark">
+  </aside>
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="{{ url_for('static', path='/js/app.js') }}"></script> 
+<script src="{{ url_for('static', path='/js/jquery-ui.min.js') }}"></script> 
+<script src="{{ url_for('static', path='/js/moment.min.js') }}"></script> 
+<script src="{{ url_for('static', path='/js/tempusdominus-bootstrap-4.min.js') }}"></script> 
+<script src="{{ url_for('static', path='/js/main.js') }}"></script> 
+<script src="{{ url_for('static', path='/js/Chart.min.js') }}"></script>
+<script>
+$(function() {
+  
+  var ticksStyle = {
+    fontColor: '#495057',
+    fontStyle: 'bold'
+  }
+
+  var mode      = 'index'
+  var intersect = true
+
+  //line-chart order progress
+
+  var $chart_order = $('#chart-order')
+  var chart_order  = new Chart($chart_order, {
+    data   : {
+      labels  : ['Januari', 'Februari', 'Maret', 'April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'],
+      datasets: [
+        {
+        type                : 'line',
+        label               : 'success',
+        data                : [1000, 2000, 3000, 2500, 2700, 2500, 3000, 2400, 1500, 5700, 3500, 2200],
+        backgroundColor     : 'transparent',
+        borderColor         : '#007bff',
+        pointBorderColor    : '#007bff',
+        pointBackgroundColor: '#007bff',
+        fill                : false
+      },
+      {
+        type: 'line',
+        label: 'canceled',
+        data: [10, 20, 34, 25, 27, 25, 30, 31, 15, 47, 25, 21],
+        backgroundColor: 'tansparent',
+        borderColor: '#FF0000',
+        pointBorderColor: '#FF0000',
+        pointBackgroundColor: '#FF0000',
+        fill: false
+      }
+      ]
+    },
+    options: {
+      maintainAspectRatio: false,
+      tooltips           : {
+        mode     : mode,
+        intersect: intersect
+      },
+      hover              : {
+        mode     : mode,
+        intersect: intersect
+      },
+      legend             : {
+        display: true
+      },
+      scales             : {
+        yAxes: [{
+        //   display: false,
+          gridLines: {
+            display      : true,
+            lineWidth    : '4px',
+            color        : 'rgba(0, 0, 0, .2)',
+            zeroLineColor: 'transparent'
+          },
+          ticks    : $.extend({
+            beginAtZero : true,
+            suggestedMax: 10000
+          }, ticksStyle)
+        }],
+        xAxes: [{
+          display  : true,
+          gridLines: {
+            display: false
+          },
+          ticks    : ticksStyle
+        }]
+      }
+    }
+  })
+
+  // Pie Chart Package Type
+  var pieChartCanvas = $('#pieChart').get(0).getContext('2d')
+  var pieData        = {
+    labels: [
+        'Single', 
+        'Twin',
+        'Double', 
+        'Superior',
+        'Deluxe', 
+        'Suite',  
+    ],
+    datasets: [
+      {
+        data: ['4400','8200','6400','5200','3700','2400'],
+        backgroundColor : ['#f56954', '#00a65a','#e95419','#948c5a','#7d5799','#012d36'],
+      }
+    ]
+  }
+  var pieOptions     = {
+    legend: {
+      display: true
+    }
+  }
+  var pieChart = new Chart(pieChartCanvas, {
+    type: 'pie',
+    data: pieData,
+    options: pieOptions      
+  })
+
+
+});
+</script>
+<script>
+    jQuery.ajax({
+        url:'http://127.0.0.1:8000/coba',
+        type: 'GET',
+        dataType: 'json',
+        success: function (data) {
+            let pie_data = [];
+            for (let i=0;i<data.data.length;i++){
+                pie_data.push(data.data[i]);
+            }
+            var pieChartCanvas = $('#pieChart1').get(0).getContext('2d')
+            var pieData        = {
+                labels: [
+                    'Negatif', 
+                    'Positif', 
+                ],
+                datasets: [
+                {
+                    data: pie_data,
+                    backgroundColor : ['#e95419','#00a65a'],
+                }
+                ]
+            }
+            var pieOptions     = {
+                legend: {
+                display: true
+                }
+            }
+            var pieChart = new Chart(pieChartCanvas, {
+                type: 'pie',
+                data: pieData,
+                options: pieOptions      
+            })
+        }
+    
+    });
+</script>
+<script>
+    jQuery.ajax({
+        url:'http://127.0.0.1:8000/sentiment_aspect',
+        type: 'GET',
+        dataType: 'json',
+        success: function (data){
+            console.log(data.labels);
+            var ticksStyle = {
+                fontColor: '#495057',
+                fontStyle: 'bold'
+            }
+
+            var mode      = 'index';
+            var intersect = true;
+            var $barChart = $('#bar-chart')
+            var barChart = new Chart($barChart, {
+            type: 'horizontalBar',
+            data: {
+                labels: ['AC','Air Panas','Bau Ruangan','Umum','Kebersihan','Linen','Pelayanan','Sarapan','Tv','Wifi'],
+                datasets: [
+                {
+                    label: 'Negatif',
+                    backgroundColor: '#e95419',
+                    borderColor: '#e95419',
+                    data: data.negatif
+                },
+                {
+                    label: 'Positif',
+                    backgroundColor: '#7d5799',
+                    borderColor: '#7d5799',
+                    data: data.positif
+                }, 
+                ]
+            },
+            options: {
+                indexAxis: 'y',
+                maintainAspectRatio: false,
+                tooltips: {
+                mode: mode,
+                intersect: intersect
+                },
+                hover: {
+                mode: mode,
+                intersect: intersect
+                },
+                legend: {
+                display: true,
+                position: 'right',
+                },
+                scales: {
+                yAxes: [{
+                    // display: false,
+                    gridLines: {
+                    display: true,
+                    lineWidth: '4px',
+                    color: 'rgba(0, 0, 0, .2)',
+                    zeroLineColor: 'transparent'
+                    },
+                    ticks: $.extend({
+                    beginAtZero: true
+                    }, ticksStyle)
+                }],
+                xAxes: [{
+                    display: true,
+                    gridLines: {
+                        display: true,
+                        lineWidth: '4px',
+                        color: 'rgba(0, 0, 0, .2)',
+                        zeroLineColor: 'transparent'
+                    },
+                    ticks: $.extend({
+                    beginAtZero: true
+                    }, ticksStyle)
+                }]
+                }
+            }
+            })
+        }
+    });
+</script>
+<script>
+    jQuery.ajax({
+        url:'http://127.0.0.1:8000/room_aspect',
+        type: 'GET',
+        dataType: 'json',
+        success: function (data){
+            console.log(data.labels);
+            var ticksStyle = {
+                fontColor: '#495057',
+                fontStyle: 'bold'
+            }
+
+            var mode      = 'index';
+            var intersect = true;
+            var $barChart = $('#bar-chart1')
+            var barChart = new Chart($barChart, {
+            type: 'bar',
+            data: {
+                labels: data.labels,
+                datasets: [
+                {
+                    label: 'Negatif',
+                    backgroundColor: '#e95419',
+                    borderColor: '#e95419',
+                    data: data.negatif
+                },
+                {
+                    label: 'Positif',
+                    backgroundColor: '#7d5799',
+                    borderColor: '#7d5799',
+                    data: data.positif
+                }, 
+                ]
+            },
+            options: {
+                indexAxis: 'y',
+                maintainAspectRatio: false,
+                tooltips: {
+                mode: mode,
+                intersect: intersect
+                },
+                hover: {
+                mode: mode,
+                intersect: intersect
+                },
+                legend: {
+                display: true,
+                position: 'right',
+                },
+                scales: {
+                yAxes: [{
+                    // display: false,
+                    gridLines: {
+                    display: true,
+                    lineWidth: '4px',
+                    color: 'rgba(0, 0, 0, .2)',
+                    zeroLineColor: 'transparent'
+                    },
+                    ticks: $.extend({
+                    beginAtZero: true
+                    }, ticksStyle)
+                }],
+                xAxes: [{
+                    display: true,
+                    gridLines: {
+                        display: true,
+                        lineWidth: '4px',
+                        color: 'rgba(0, 0, 0, .2)',
+                        zeroLineColor: 'transparent'
+                    },
+                    ticks: $.extend({
+                    beginAtZero: true
+                    }, ticksStyle)
+                }]
+                }
+            }
+            })
+        }
+    });
+</script>
+</body>
+</html>
